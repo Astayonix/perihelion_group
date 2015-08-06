@@ -2,7 +2,7 @@
 
 import datetime
 
-from model import User, Rating, Movie, connect_to_db, db
+from model import User, Sector, Industry, StockList, DividendSummary, IncomeStatementSummary, StockUser, connect_to_db, db
 from server import app
 
 

@@ -1,4 +1,4 @@
-"""Movie Ratings."""
+"""Investing With The Perihelion Group"""
 
 from jinja2 import StrictUndefined
 
@@ -20,9 +20,9 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """Homepage."""
+    """The Perihelion Group's Homepage."""
 
-    return "<html><body>Placeholder for the homepage.</body></html>"
+    return "<html><body>Welcome to the Perihelion Group's Homepage!</body></html>"
 
 
 if __name__ == "__main__":
