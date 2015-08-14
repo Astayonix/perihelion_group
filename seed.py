@@ -1,31 +1,51 @@
 """Utility file to seed ratings database from MovieLens data in seed_data/"""
 
-import datetime
+import csv
 
-from model import User, Sector, Industry, StockList, DividendSummary, IncomeStatementSummary, StockUser, connect_to_db, db
+# from model import User, Sector, Industry, Stock, StockQuoteSummary, StockUser, connect_to_db, db
+from model import Sector, Industry, connect_to_db, db
+# from model import Industry, connect_to_db, db
 from server import app
 
 
-def load_users():
-    """Load users from u.user into database."""
+def load_sectors():
+    """Load sectors from nasdaq.csv into the database."""
 
-    print "Users"
+    print "Sectors"
 
-    for i, row in enumerate(open("seed_data/u.user")):
-        row = row.rstrip()
-        user_id, age, gender, occupation, zipcode = row.split("|")
+    # begin the unpack of the companies available for trade on the amex, nasdaq, and nyse list!
+    with open('seed_data/amex_nasdaq_nyse_companies.csv', 'rb') as seedfile:
+        reader = csv.reader(seedfile, delimiter=",")
+        reader.next()
+        uniquesectors = set()
+        for row in reader:
+            sectors = row[5].rstrip()
+            uniquesectors.add(sectors)
+        for sectorname in uniquesectors:
+            sector = Sector()
+            sector.sector_name=sectorname
+            db.session.add(sector)
+    # Once we're done, we should commit our work
+    db.session.commit()
 
-        user = User(user_id=user_id,
-                    age=age,
-                    zipcode=zipcode)
 
-        # We need to add to the session or it won't ever be stored
-        db.session.add(user)
+def load_industries():
+    """Load industries from nasdaq.csv into the database."""
 
-        # provide some sense of progress
-        if i % 100 == 0:
-            print i
+    print "Industries"
 
+    # begin the unpack of the companies available for trade on the amex, nasdaq, and nyse list!
+    with open('seed_data/amex_nasdaq_nyse_companies.csv', 'rb') as seedfile:
+        reader = csv.reader(seedfile, delimiter=",")
+        reader.next()
+        uniqueindustries = set()
+        for row in reader:
+            industries = row[6].rstrip()
+            uniqueindustries.add(industries)
+        for industryname in uniqueindustries:
+            industry = Industry()
+            industry.industry_name=industryname
+            db.session.add(industry)
     # Once we're done, we should commit our work
     db.session.commit()
 
@@ -112,6 +132,8 @@ if __name__ == "__main__":
     connect_to_db(app)
     db.create_all()
 
-    load_users()
-    load_movies()
-    load_ratings()
+    load_sectors()
+    load_industries()
+    # load_users()
+    # load_movies()
+    # load_ratings()
