@@ -8,7 +8,10 @@ with open('seed_data/amex_dividend_summary.csv', 'rb') as seedfile:
         dividendsummary = row[9].strip()
         if dividendsummary:
             dividendbroken = dividendsummary.split(" ")
-            print dividendbroken
+            if dividendbroken[0]=="Dividend":
+                pass
+            else:
+                print dividendbroken
         #     import pdb; pdb.set_trace()
             # disqualifer = "Dividend"
             # if dividendbroken[0] != disqualifier:

@@ -5,7 +5,7 @@ from jinja2 import StrictUndefined
 from flask import Flask
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db
+from model import connect_to_db, db, Stock
 
 
 app = Flask(__name__)
@@ -21,8 +21,8 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """The Perihelion Group's Homepage."""
-
-    return "<html><body>Welcome to the Perihelion Group's Homepage!</body></html>"
+    desc = Stock.query.get("FLWS").company_desc
+    return "<html><body>%s</body></html>" % desc
 
 
 if __name__ == "__main__":
