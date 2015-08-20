@@ -111,22 +111,22 @@ class StockQuoteSummary(db.Model):
         return "<%s belongs to %s.>" % (self.stock_summary_id, self.ticker_symbol)
 
 
-# class DividendSummary(db.Model):
+class DividendSummary(db.Model):
 #     """The dividend activity for all the stocks available on the Perihelion Group's website."""
 
-#     __tablename__ = "stockdividends"
+    __tablename__ = "stockdividends"
 
-#     dividend_summary_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     # ticker_symbol = db.Column(db.String(15), db.ForeignKey('stocks.ticker_symbol'), nullable=False)
-#     dividend_summary_data = db.Column(db.String(1000), nullable=False) #needs to be unpacked becuase produces multiple columns
+    dividend_summary_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    ticker_symbol = db.Column(db.String(15), db.ForeignKey('stocks.ticker_symbol'), nullable=False)
+    dividend_summary_data = db.Column(db.String(1000), nullable=False) #needs to be unpacked becuase produces multiple columns
    
 
-#     ticker_symbol = db.relationship('Stock', backref=db.backref('stock_dividends'))
+    ticker_symbol = db.relationship('Stock', backref=db.backref('stock_dividends'))
 
-#     def __repr__(self):
-#         """Provide helpful representation when printed."""
+    def __repr__(self):
+        """Provide helpful representation when printed."""
 
-#         return "<%s's dividend summary info belongs to %s>" % (self.dividend_summary_id, self.ticker_symbol)
+        return "<%s's dividend summary info belongs to %s>" % (self.dividend_summary_id, self.ticker_symbol)
 
 
 # class IncomeStatementSummary(db.Model):
