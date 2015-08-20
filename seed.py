@@ -1,9 +1,10 @@
-"""Utility file to seed ratings database from MovieLens data in seed_data/"""
+"""Utility file to seed ratings Perihelion Group database data located in in seed_data/"""
 
 import re
 import csv
+import datetime
 
-from model import User, Sector, Industry, Stock, StockQuoteSummary, connect_to_db, db
+from model import User, Sector, Industry, Stock, StockQuoteSummary, DividendSummary, connect_to_db, db
 from server import app
 
 
@@ -246,82 +247,50 @@ def fill_last_trade():
     db.session.commit()
 
 
-def load_movies():
-    """Load movies from u.item into database."""
+def load_dividend_summary():
+    """Load population of dividend summary information from dividend_summary.csvs and into the database."""
 
-    print "Movies"
+    print "Load Dividend Summary"
 
-    for i, row in enumerate(open("seed_data/u.item")):
-        row = row.rstrip()
+    # all of the ticker symbols available for trade on the amex, nasdaq, and nyse list
+    seedfilepathlist = ['seed_data/amex_dividend_summary.csv', 'seed_data/nasdaq_dividend_summary.csv', 'seed_data/nyse_dividend_summary.csv']
 
-        # clever -- we can unpack part of the row!
-        movie_id, title, released_str, junk, imdb_url = row.split("|")[:5]
+    for seedfilepath in seedfilepathlist:
 
-        # The date is in the file as daynum-month_abbreviation-year;
-        # we need to convert it to an actual datetime object.
+        with open(seedfilepath, 'rb') as seedfile:
+            reader = csv.reader(seedfile, delimiter=",")
+            reader.next()
+            prev_ticker_insurance = None
+            for row in reader:
+                ticker = row[7]
+                if ticker:
+                    prev_ticker = ticker
+                else:
+                    ticker = prev_ticker
+                dividendsummary = row[9]
+                if dividendsummary:
+                    dividendbroken = dividendsummary.split()
+                    if dividendbroken[0]!="Dividend":
+                        dividendtrimmed = dividendbroken[11:]
+                        for i in range(0,len(dividendtrimmed),6):
+                            effective_date = dividendtrimmed[i]
+                            if effective_date:
+                                effective_date = datetime.datetime.strptime(effective_date, "%m/%d/%Y")
+                            else:
+                                effective_date = None
+                            dividend_type = dividendtrimmed[i+1]
+                            dividend_amount = dividendtrimmed[i+2]
 
-        if released_str:
-            released_at = datetime.datetime.strptime(released_str, "%d-%b-%Y")
-        else:
-            released_at = None
+                            dividendsummary = DividendSummary(ticker_symbol=ticker,
+                            effective_date=effective_date,
+                            dividend_type=dividend_type,
+                            dividend_amount=dividend_amount)
 
-        # Remove the (YEAR) from the end of the title.
-
-        title = title[:-7]   # " (YEAR)" == 7
-
-        movie = Movie(movie_id=movie_id,
-                      title=title,
-                      released_at=released_at,
-                      imdb_url=imdb_url)
-
-        # We need to add to the session or it won't ever be stored
-        db.session.add(movie)
-
-        # provide some sense of progress
-        if i % 100 == 0:
-            print i
-
-    # Once we're done, we should commit our work
+                            db.session.add(dividendsummary)
+                
+    # # Once we're done, we should commit our work
     db.session.commit()
 
-
-def load_ratings():
-    """Load ratings from u.data into database."""
-
-    print "Ratings"
-
-    for i, row in enumerate(open("seed_data/u.data")):
-        row = row.rstrip()
-
-        user_id, movie_id, score, timestamp = row.split("\t")
-
-        user_id = int(user_id)
-        movie_id = int(movie_id)
-        score = int(score)
-
-        # We don't care about the timestamp, so we'll ignore this
-
-        rating = Rating(user_id=user_id,
-                        movie_id=movie_id,
-                        score=score)
-
-        # We need to add to the session or it won't ever be stored
-        db.session.add(rating)
-
-        # provide some sense of progress
-        if i % 1000 == 0:
-            print i
-
-            # An optimization: if we commit after every add, the database
-            # will do a lot of work committing each record. However, if we
-            # wait until the end, on computers with smaller amounts of
-            # memory, it might thrash around. By committing every 1,000th
-            # add, we'll strike a good balance.
-
-            db.session.commit()
-
-    # Once we're done, we should commit our work
-    db.session.commit()
 
 
 if __name__ == "__main__":
@@ -334,6 +303,4 @@ if __name__ == "__main__":
     fill_stock_desc()
     load_stock_summary()
     fill_last_trade()
-    # load_users()
-    # load_movies()
-    # load_ratings()
+    load_dividend_summary()

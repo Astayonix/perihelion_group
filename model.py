@@ -117,11 +117,13 @@ class DividendSummary(db.Model):
     __tablename__ = "stockdividends"
 
     dividend_summary_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    ticker_symbol = db.Column(db.String(15), db.ForeignKey('stocks.ticker_symbol'), nullable=False)
-    dividend_summary_data = db.Column(db.String(1000), nullable=False) #needs to be unpacked becuase produces multiple columns
+    ticker_symbol = db.Column(db.String(15), db.ForeignKey('stocks.ticker_symbol'), unique=False, nullable=False)
+    # dividend_summary_data = db.Column(db.String(1000), nullable=False) #needs to be unpacked becuase produces multiple columns
+    effective_date = db.Column(db.DateTime, unique=False, nullable=False)
+    dividend_type = db.Column(db.Integer, unique=False, nullable =False)
+    dividend_amount = db.Column(db.Integer, unique=False, nullable=False)
    
-
-    ticker_symbol = db.relationship('Stock', backref=db.backref('stock_dividends'))
+    stock = db.relationship('Stock', backref=db.backref('stockdividends'))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
