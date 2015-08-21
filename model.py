@@ -20,7 +20,8 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True) #auto-generated
     user_name = db.Column(db.String(100), nullable=False) #user provides
     password = db.Column(db.String(64), nullable=False) #user provides
-    initial_investment = db.Column(db.Integer, nullable=False) #user provides
+    initial_investment = db.Column(db.Integer, nullable=True) #user provides
+    speculative = db.Column(db.Boolean, nullable=True)
     
     def __repr__(self):
         """Provide helpful representation when printed."""

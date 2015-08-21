@@ -2,10 +2,10 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask
+from flask import Flask, request, render_template, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, Stock
+from model import User, Stock, connect_to_db, db
 
 
 app = Flask(__name__)
@@ -20,10 +20,26 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """The Perihelion Group's Homepage."""
-    desc = Stock.query.get("FLWS").company_desc
-    return "<html><body>%s</body></html>" % desc
+    """Homepage."""
 
+    return render_template("homepage.html")
+
+
+@app.route('/speculation', methods=['POST'])
+def set_spec_pref():
+    """Ask if the user wants to speculate."""
+    # userpref = request.form.get("preference")
+    userpref = True
+    # userid = session.get("user_id")
+    userid = 1
+
+    user = User.query.get(userid)
+
+    user.speculative = userpref
+    db.session.commit()
+
+
+    return "The user chose to speculate!"
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
