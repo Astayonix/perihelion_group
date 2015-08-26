@@ -21,7 +21,10 @@ class User(db.Model):
     user_name = db.Column(db.String(100), nullable=False) #user provides
     password = db.Column(db.String(64), nullable=False) #user provides
     initial_investment = db.Column(db.Integer, nullable=True) #user provides
-    speculative = db.Column(db.Boolean, nullable=True)
+    speculative = db.Column(db.String(5), nullable=True)#user provides
+
+    stocks = db.relationship('Stock', secondary="stockusers",
+        backref=db.backref('users', lazy='dynamic'))
     
     def __repr__(self):
         """Provide helpful representation when printed."""

@@ -1,0 +1,10 @@
+Select Your 5 Sectors:
+<form method="GET" action="/industryselect">
+<br>
+{% for sector in sectors %}
+<label>{{sector.sector_name}}
+<input type="checkbox" name="sectors" value="{{sector.sector_name}}">
+</label>
+{% endfor %}
+<input type="submit" value="Next">
+</form>

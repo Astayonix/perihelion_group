@@ -1,0 +1,10 @@
+Select Your Industries:
+<form method="GET" action="/companyselect">
+<br>
+{% for industry in industries %}
+<label>{{industry.industry_name}}
+<input type="checkbox" name="industries" value="{{industry.industry_name}}">
+</label>
+{% endfor %}
+<input type="submit" value="Next">
+</form>

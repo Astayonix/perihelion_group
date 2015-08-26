@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title> The Perihelion Group</title>
+    </head>
+    <body>
+        <h1> Manage Your Portfolio </h1>
+        Please make your portfoio management selections.
+        <br>
+        <svg width=500 height=400>
+              <circle cx=50 cy=50 r=40 stroke="green" stroke-width=4 fill="yellow"/>
+              <circle cx=100 cy=150 r=40 stroke="black" stroke-width=3 fill="blue"/>
+              <rect x=0 y=0 width=50 height=50 fill="green"/>
+              <circle cx=25 cy=25 r=25 fill="purple"/>
+              <ellipse cx=25 cy=25 rx=25 ry=25 fill="red"/>
+              <line x1=5 y1=5 x2=40 y2=40 stroke="gray" stroke-width=5/>
+              <polyline fill="green" stroke="blue" stroke-width=2
+                points= 05,30
+                        15,30
+                        15,20
+                        25,20
+                        25,10
+                        35,10/>
+              <polygon fill="red" stroke="blue" stroke-width=2
+                points= 05,30
+                        15,10
+                        25,30/>
+        </svg>
+        {% for stock in userstocks %}
+        {{stock.ticker_symbol}}
+        <br>
+        {{stock.company_name}}
+        <br>
+        {{stock.company_desc}}
+        <br>
+        {{stock.sector.sector_name}} and {{stock.industry.industry_name}}
+        {% endfor %}
+    </body>
+</html>

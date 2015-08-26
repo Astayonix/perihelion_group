@@ -1,0 +1,10 @@
+Select Your 20 Companies:
+<form method="GET" action="/portfoliomanagertemplate">
+<br>
+{% for company in companies %}
+<label>{{company.company_name}}
+<input type="checkbox" name="companies" value="{{company.company_name}}">
+</label>
+{% endfor %}
+<input type="submit" value="Build My Portfolio">
+</form>
