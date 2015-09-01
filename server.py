@@ -164,8 +164,8 @@ def portfolio_json():
     # print data
     # import pdb;pdb.set_trace()
     data=Stock.clusternester(session.get("user_id"))
-    outerdata = {"children": data, "name": "stockidentifier"}
-    return jsonify(outerdata)
+    # outerdata = {"children": data, "name": "stockidentifier"}
+    return jsonify(data)
 
 
 

@@ -30,10 +30,10 @@
         </div>
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+        <script src="/static/javascript/colorbrewer.js"></script>
 
         <script>
         $(document).ready(function(){
-          debugger
         var diameter = 960,
             format = d3.format(",d");
 
@@ -52,6 +52,11 @@
 
         d3.json("/portfoliojson", function(root) {
           // if (error) throw error;
+          debugger;
+          var color = d3.scale.linear()
+            .range(colorbrewer.Spectral[3])
+            .domain([root.min, root.mid, root.max]);
+            // debugger;
 
           var node = svg.datum(root).selectAll(".node")
               .data(pack.nodes)
@@ -63,7 +68,8 @@
               .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); });
 
           node.append("circle")
-              .attr("r", function(d) { return d.r; });
+              .attr("r", function(d) { return d.r; })
+              .style("fill", function(d) {return color(d.dividend)});
 
           node.filter(function(d) { return !d.children; }).append("text")
               .attr("dy", ".3em")

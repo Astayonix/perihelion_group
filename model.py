@@ -103,6 +103,8 @@ class Stock(db.Model):
                     currentindustries.append(stock.industry.industry_name)
                 sectors[stock.sector.sector_name]=currentindustries
         jsonsectors=[]
+        dividendmax=None
+        dividendmin=None
         # pdb.set_trace()
         for sector in sectors.keys():
             sectordict = {"name":sector, "children":[]}
@@ -112,10 +114,17 @@ class Stock(db.Model):
                 for stockuser in stockusers:
                     if stockuser.stock.industry_name == industry:
                         industrydict["children"].append(stockuser.json())
+                        if stockuser.stock.stockquotesummary[0].annualized_dividend > dividendmax:
+                            dividendmax = stockuser.stock.stockquotesummary[0].annualized_dividend
+                        elif stockuser.stock.stockquotesummary[0].annualized_dividend < dividendmin or dividendmin == None:
+                            dividendmin = stockuser.stock.stockquotesummary[0].annualized_dividend
+
                 sectordict["children"].append(industrydict)
             jsonsectors.append(sectordict)
+        dividendmid = (dividendmax + dividendmin) / 2
+        alldividenddata = {"children":jsonsectors, "name": "Economy", "min":dividendmin, "max":dividendmax, "mid":dividendmid}
         # import pdb; pdb.set_trace()
-        return jsonsectors
+        return alldividenddata
 
 
 class StockQuoteSummary(db.Model):
@@ -213,11 +222,12 @@ class StockUser(db.Model):
         jsonstockuser={}
         jsonstockuser["name"]=self.stock.company_name
         jsonstockuser["ticker"]=self.stock.ticker_symbol
-        print "The last trade is", self.stock.stockquotesummary
-        try:  
-            jsonstockuser["size"]=self.stock.stockquotesummary[0].annualized_dividend
-        except:
-            jsonstockuser["size"]=None
+        jsonstockuser["size"]=1
+        jsonstockuser["dividend"]=self.stock.stockquotesummary[0].annualized_dividend
+        # try:  
+        #     jsonstockuser["size"]=self.stock.stockquotesummary[0].annualized_dividend
+        # except:
+        #     jsonstockuser["size"]=None
         return jsonstockuser
 
     def stockdetail(self):
