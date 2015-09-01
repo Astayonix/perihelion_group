@@ -1,30 +1,82 @@
 <html>
     <head>
         <title> The Perihelion Group</title>
+    <style>
+
+        circle {
+          fill: rgb(31, 119, 180);
+          fill-opacity: .25;
+          stroke: rgb(31, 119, 180);
+          stroke-width: 1px;
+        }
+
+        .leaf circle {
+          fill: #ff7f0e;
+          fill-opacity: 1;
+        }
+
+        text {
+          font: 10px sans-serif;
+        }
+
+        </style>
     </head>
     <body>
         <h1> Manage Your Portfolio </h1>
-        Please make your portfoio management selections.
+        Here is your portfolio.
         <br>
-        <svg width=500 height=400>
-              <circle cx=50 cy=50 r=40 stroke="green" stroke-width=4 fill="yellow"/>
-              <circle cx=100 cy=150 r=40 stroke="black" stroke-width=3 fill="blue"/>
-              <rect x=0 y=0 width=50 height=50 fill="green"/>
-              <circle cx=25 cy=25 r=25 fill="purple"/>
-              <ellipse cx=25 cy=25 rx=25 ry=25 fill="red"/>
-              <line x1=5 y1=5 x2=40 y2=40 stroke="gray" stroke-width=5/>
-              <polyline fill="green" stroke="blue" stroke-width=2
-                points= 05,30
-                        15,30
-                        15,20
-                        25,20
-                        25,10
-                        35,10/>
-              <polygon fill="red" stroke="blue" stroke-width=2
-                points= 05,30
-                        15,10
-                        25,30/>
-        </svg>
+
+        <div id="thechart">
+        </div>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+        <script>
+        $(document).ready(function(){
+          debugger
+        var diameter = 960,
+            format = d3.format(",d");
+
+        var pack = d3.layout.pack()
+            .size([diameter - 4, diameter - 4])
+            .value(function(d) { return d.size; });
+
+        var y = d3.scale.linear()
+                .range([0,720]);
+
+        var svg = d3.select("#thechart").append("svg")
+            .attr("width", diameter)
+            .attr("height", diameter)
+          .append("g")
+            .attr("transform", "translate(2,2)");
+
+        d3.json("/portfoliojson", function(root) {
+          // if (error) throw error;
+
+          var node = svg.datum(root).selectAll(".node")
+              .data(pack.nodes)
+            .enter().append("g")
+              .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+              .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+          node.append("title")
+              .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); });
+
+          node.append("circle")
+              .attr("r", function(d) { return d.r; });
+
+          node.filter(function(d) { return !d.children; }).append("text")
+              .attr("dy", ".3em")
+              .style("text-anchor", "middle")
+              .text(function(d) { return d.name.substring(0, d.r / 3); });
+        });
+
+        d3.select(self.frameElement).style("height", diameter + "px");
+      });
+
+        </script>
+
+
         {% for stock in userstocks %}
         {{stock.ticker_symbol}}
         <br>

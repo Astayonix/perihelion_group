@@ -44,6 +44,13 @@ class Sector(db.Model):
 
         return "<The sector is %s>" % (self.sector_name)
 
+    def json(self):
+        """Makes an dictionary representation of the StockUser"""
+        jsonsector={}
+        jsonsector["name"]=self.sector_name
+
+        return jsonsector
+
 
 class Industry(db.Model):
     """A table containing all of the available industries stocks can belong to."""
@@ -56,6 +63,13 @@ class Industry(db.Model):
         """Provide helpful representation when printed."""
 
         return "<The industry is %s>" % (self.industry_name)
+
+    def json(self):
+        """Makes an dictionary representation of the StockUser"""
+        jsonindustry={}
+        jsonindustry["name"]=self.industry_name
+        
+        return jsonindustry
 
 
 class Stock(db.Model):
@@ -77,6 +91,31 @@ class Stock(db.Model):
         """Provide helpful representation when printed."""
 
         return "<%s has a ticker symbol of %s, belongs to industry %s, and sector %s>" % (self.company_name, self.ticker_symbol, self.industry_name, self.sector_name)
+
+    @classmethod
+    def clusternester(cls,user_id):
+        # import pdb; pdb.set_trace()
+        sectors = {}
+        for stock in cls.query.all():
+            if stock.sector:
+                currentindustries = sectors.get(stock.sector.sector_name, [])
+                if stock.industry.industry_name not in currentindustries:
+                    currentindustries.append(stock.industry.industry_name)
+                sectors[stock.sector.sector_name]=currentindustries
+        jsonsectors=[]
+        # pdb.set_trace()
+        for sector in sectors.keys():
+            sectordict = {"name":sector, "children":[]}
+            for industry in sectors[sector]:
+                industrydict = {"name":industry, "children":[]}
+                stockusers = StockUser.query.filter_by(user_id=user_id).all()
+                for stockuser in stockusers:
+                    if stockuser.stock.industry_name == industry:
+                        industrydict["children"].append(stockuser.json())
+                sectordict["children"].append(industrydict)
+            jsonsectors.append(sectordict)
+        # import pdb; pdb.set_trace()
+        return jsonsectors
 
 
 class StockQuoteSummary(db.Model):
@@ -168,6 +207,38 @@ class StockUser(db.Model):
         """Provide helpful representation when printed."""
 
         return "<%s is %s, who owns %s>" % (self.stockuser_id, self.user_id, self.ticker_symbol)
+
+    def json(self):
+        """Makes an dictionary representation of the StockUser"""
+        jsonstockuser={}
+        jsonstockuser["name"]=self.stock.company_name
+        jsonstockuser["ticker"]=self.stock.ticker_symbol
+        print "The last trade is", self.stock.stockquotesummary
+        try:  
+            jsonstockuser["size"]=self.stock.stockquotesummary[0].annualized_dividend
+        except:
+            jsonstockuser["size"]=None
+        return jsonstockuser
+
+    def stockdetail(self):
+        """Makes a dictionary representation of the Stock Details"""
+        jsonstockdetail={}
+        jsonstockdetail["dividend"]=self.stock.stockquotesummary[0].annualized_dividend
+        jsonstockdetail["lasttrade"]=self.stock.stockquotesummary[0].last_trade
+        jsonstockdetail["sharevolume"]=self.stock.stockquotesummary[0].share_volume
+        jsonstockdetail["marketcap"]=self.stock.stockquotesummary[0].market_cap
+        jsonstockdetail["peratio"]=self.stock.stockquotesummary[0].pe_ratio
+        jsonstockdetail["eps"]=self.stock.stockquotesummary[0].earnings_per_share
+        
+        return jsonstockdetail
+
+    def dividenddetail(self):
+        """Makes a dictionary representation of the Dividend Details"""
+        jsondividenddetail={}
+        jsondividenddetail["dividenddate"]=self.stock.stockdividends.effective_date
+        jsondividenddetail["dividendamount"]=self.stock.stockdividends.dividend_amount
+
+        return jsondividenddetail
 
 
 ##############################################################################

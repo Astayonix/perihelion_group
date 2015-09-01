@@ -2,10 +2,12 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, request, render_template, session, flash, redirect
+from flask import Flask, request, render_template, session, flash, redirect, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import User, Stock, Sector, Industry, connect_to_db, db
+from sqlalchemy import or_, and_
+
+from model import User, Stock, Sector, Industry, StockUser, StockQuoteSummary, DividendSummary, connect_to_db, db
 
 
 app = Flask(__name__)
@@ -40,7 +42,6 @@ def user_registration():
 
     new_user = User(user_name=username, password=password, initial_investment=investment, speculative=speculative)
 
-    print new_user
     db.session.add(new_user)
     db.session.commit()
 
@@ -58,11 +59,20 @@ def portfoliotemplate():
     """Goes to the Portfolio Manager Page."""
     current_user_id = session.get('user_id')
 
+
     if current_user_id:
         user = User.query.filter_by(user_id=current_user_id).one()
-        stocks = Stock.query.offset(1).limit(20).all()
-        user.stocks = stocks
-        print user.stocks
+        selected_stocktickers = request.args.getlist('companies')
+        individual_stocks = []
+
+        for stock_ticker in selected_stocktickers:
+
+            stock = Stock.query.get(stock_ticker)
+            individual_stocks.append(stock)
+
+        user.stocks.extend(individual_stocks)
+        db.session.commit()
+
         return render_template("portfoliomanager.html", userstocks=user.stocks)
     else:
         return redirect("/")
@@ -71,8 +81,26 @@ def portfoliotemplate():
 @app.route('/sectorselect')
 def sectorselect():
     """Goes to the Sector Selection Page"""
-    sectors = Sector.query.all()
-    return render_template("sectorselect.html", sectors=sectors)
+
+    # already_selected_sector = User.query.join(Stock).join(Sector).filter(user_name=username).first()
+    current_user_ticker_list = db.session.query(StockUser.ticker_symbol).filter_by(user_id=session["user_id"]).all()
+
+    current_user_tickers = [ticker_tuple[0] for ticker_tuple in current_user_ticker_list]
+
+    print "This is a test.", current_user_tickers
+
+    sectors = db.session.query(Stock.sector_name).filter(~Stock.ticker_symbol.in_(current_user_tickers)).all()
+
+    list_of_sectors = [sector_tuple[0] for sector_tuple in sectors]
+
+    unique_sectors = set(list_of_sectors)
+
+    # for sector in sectors:
+    #     if already_selected_sector not in sectors:
+    #     return sectors
+
+    return render_template("sectorselect.html", sectors=unique_sectors)
+
 
 @app.route('/industryselect')
 def industryselect():
@@ -81,11 +109,26 @@ def industryselect():
     industries = Industry.query.join(Stock).filter(Stock.sector_name.in_(sectors)).all()
     return render_template("industryselect.html", industries=industries)
 
+
 @app.route('/companyselect')
 def companyselect():
     """Goes to the Company Selection Page"""
     industries = request.args.getlist("industries")
+    tickers_set = set()
     companies = Stock.query.join(Industry).filter(Stock.industry_name.in_(industries)).all()
+    current_user_id = session.get('user_id')
+    user = User.query.filter_by(user_id=current_user_id).first()
+
+    if user.speculative == "No":
+        print "is not speculative", user.speculative
+        for company in companies: 
+            for c in company.stockdividends:
+                tickers_set.add(c.ticker_symbol)
+    else:
+        print "is speculative", user.speculative
+        for company in companies:
+            tickers_set.add(company.ticker_symbol)
+
     return render_template("companyselect.html", companies=companies)
 
 @app.route('/login', methods=['POST'])
@@ -97,9 +140,6 @@ def login_process():
     password = request.form["password"]
 
     user = User.query.filter_by(user_name=username).first()
-    print password
-    print user.password
-    print user.user_name
 
     if not user:
         flash("No such user")
@@ -113,9 +153,20 @@ def login_process():
     flash("Logged in")
     return redirect("/sectorselect")
 
-# @app.route('/authenticate', methods=['POST'])
-# def authenticate_user():
-#     """Verify the user's name and password."""
+@app.route('/portfoliojson', methods=['GET'])
+def portfolio_json():
+    """JSONify the user's stock portfolio."""
+    # alluserstocks = StockUser.query.filter_by(user_id=session.get("user_id")).all()
+    # jsonlist=[]
+    # for userstock in alluserstocks:
+    #     jsonlist.append(userstock.json())
+    # data = {"children":jsonlist,"name":"stockidentifier"}
+    # print data
+    # import pdb;pdb.set_trace()
+    data=Stock.clusternester(session.get("user_id"))
+    outerdata = {"children": data, "name": "stockidentifier"}
+    return jsonify(outerdata)
+
 
 
 
