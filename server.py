@@ -63,12 +63,15 @@ def portfoliotemplate():
     if current_user_id:
         user = User.query.filter_by(user_id=current_user_id).one()
         selected_stocktickers = request.args.getlist('companies')
+
+        stockusers=StockUser.query.filter_by(user_id=current_user_id).all()
+        tickers = [su.stock.ticker_symbol for su in stockusers]
         individual_stocks = []
 
         for stock_ticker in selected_stocktickers:
-
-            stock = Stock.query.get(stock_ticker)
-            individual_stocks.append(stock)
+            if stock_ticker not in tickers:
+                stock = Stock.query.get(stock_ticker)
+                individual_stocks.append(stock)
 
         user.stocks.extend(individual_stocks)
         db.session.commit()
@@ -87,9 +90,9 @@ def sectorselect():
 
     current_user_tickers = [ticker_tuple[0] for ticker_tuple in current_user_ticker_list]
 
-    print "This is a test.", current_user_tickers
-
     sectors = db.session.query(Stock.sector_name).filter(~Stock.ticker_symbol.in_(current_user_tickers)).all()
+    
+    print "Here is the list", sectors
 
     list_of_sectors = [sector_tuple[0] for sector_tuple in sectors]
 
@@ -183,7 +186,7 @@ def portfolio_json():
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
-    app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 

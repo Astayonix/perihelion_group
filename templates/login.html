@@ -1,19 +1,32 @@
-<html>
-    <head>
-        <title> The Perihelion Group</title>
-    </head>
-    <body>
+{% extends "base.html" %}
+{% block content %}
+<style>
+h1, h3 {
+    text-align: center
+}
+
+</style>
         <h1> Welcome Back!</h1>
-        Please Log In.
+        <h3>Please Log In.</h3>
         <br>
-        <form action="/login" method="POST">
-            Please Enter Your Name:
-            <input type="text" default="Name" name="username">
-            <br>
-            Please Enter Your Password:
-            <input type="password" name="password">
-            <br>
-            <input type="submit" name="submitme" value="Log In">
-        </form>
-    </body>
-</html>
+<form action="/login" method="POST" class="form-horizontal">
+  <div class="form-group">
+    <label for="username" class="col-sm-2 col-md-offset-2 control-label">Please Enter Your Name</label>
+    <div class="col-sm-5">
+      <input type="text" class="form-control" id="username" placeholder="username" name="username">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="password" class="col-sm-2 col-md-offset-2 control-label">Please Enter Your Password</label>
+    <div class="col-sm-5">
+      <input type="password" class="form-control" value="password" id="password" placeholder="password" name="password">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-4 col-sm-5">
+      <button type="submit" class="btn btn-default" name="submitme">Log In</button>
+    </div>
+  </div>
+</form>
+{% endblock %}
+

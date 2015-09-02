@@ -121,8 +121,8 @@ class Stock(db.Model):
 
                 sectordict["children"].append(industrydict)
             jsonsectors.append(sectordict)
-        dividendmid = (dividendmax + dividendmin) / 2
-        alldividenddata = {"children":jsonsectors, "name": "Economy", "min":dividendmin, "max":dividendmax, "mid":dividendmid}
+        # dividendmid = (dividendmax + dividendmin) / 2
+        alldividenddata = {"children":jsonsectors, "name": "Economy", "min":dividendmin, "max":dividendmax}
         # import pdb; pdb.set_trace()
         return alldividenddata
 
