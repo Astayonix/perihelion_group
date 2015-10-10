@@ -7,6 +7,37 @@ The Perihelion Group is a stock portfolio selection tool that allows the user to
 
 This is a visualization tool meant to help investors think more strategically about the kind of returns they want from their stock portfolios.  Using The Perihelion Group, investors can ask themselves questions like "Are my investments too heavily weighted in a specific sector and/or industry?" and "Is the dividend yield I am expecting aggressive enough to meet my liquid asset needs?"  I want to get people thinking differently about their data in a disruptive - yet intuitive - way.
 
+<h5> Visualization of User Experience </h5>
+Landing Page:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_1.bmp)
+
+User Registration:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_2.bmp)
+
+User Signs In:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_3.bmp)
+
+User Selects Sectors:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_4.bmp)
+
+User Selects Industries:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_5.bmp)
+
+User Selects Companies #1:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_6.bmp)
+
+User Selects Companies #2:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_7.bmp)
+
+User's TPG Portfolio Visualization #1:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_8.bmp)
+
+User's TPG Portfolio Visualization #2:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_9.bmp)
+
+User's Portfolio Detail Modal Window:
+![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_10.bmp)
+
 <h5> Technical Stack </h5>
 Python, Javascript, Flask, Jinja, jQuery, SQLAlchemy, D3.js, HTML/CSS, Bootstrap, Import.io, JSON, SQLAlchemy, SQLite, and RegEx for Python
 
