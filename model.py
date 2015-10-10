@@ -94,7 +94,6 @@ class Stock(db.Model):
 
     @classmethod
     def clusternester(cls,user_id):
-        # import pdb; pdb.set_trace()
         sectors = {}
         for stock in cls.query.all():
             if stock.sector:
@@ -105,7 +104,6 @@ class Stock(db.Model):
         jsonsectors=[]
         dividendmax=None
         dividendmin=None
-        # pdb.set_trace()
         for sector in sectors.keys():
             sectordict = {"name":sector, "children":[]}
             for industry in sectors[sector]:
@@ -118,12 +116,9 @@ class Stock(db.Model):
                             dividendmax = stockuser.stock.stockquotesummary[0].annualized_dividend
                         elif stockuser.stock.stockquotesummary[0].annualized_dividend < dividendmin or dividendmin == None:
                             dividendmin = stockuser.stock.stockquotesummary[0].annualized_dividend
-
                 sectordict["children"].append(industrydict)
             jsonsectors.append(sectordict)
-        # dividendmid = (dividendmax + dividendmin) / 2
         alldividenddata = {"children":jsonsectors, "name": "Economy", "min":dividendmin, "max":dividendmax}
-        # import pdb; pdb.set_trace()
         return alldividenddata
 
 
@@ -134,8 +129,6 @@ class StockQuoteSummary(db.Model):
 
     stock_summary_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     ticker_symbol = db.Column(db.String(15), db.ForeignKey('stocks.ticker_symbol'), unique=True, nullable=False)
-    # ticker_quote_summary = db.Column(db.String(500), nullable=False) #needs to be unpacked becuase produces multiple columns
-    # stock_summary_data = db.Column(db.String(1000), nullable=False) #needs to be unpacked becuase produces multiple columns
     last_trade  = db.Column(db.Integer, nullable=True) #seeded from nasdaq.csv (seed initially with " ")
     one_yr_target = db.Column(db.Integer, nullable=True) #seeded from the stock_summary files
     intra_day_high = db.Column(db.Integer, nullable=True) #seeded from the stock_summary files
@@ -164,13 +157,12 @@ class StockQuoteSummary(db.Model):
 
 
 class DividendSummary(db.Model):
-#     """The dividend activity for all the stocks available on the Perihelion Group's website."""
+    """The dividend activity for all the stocks available on the Perihelion Group's website."""
 
     __tablename__ = "stockdividends"
 
     dividend_summary_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     ticker_symbol = db.Column(db.String(15), db.ForeignKey('stocks.ticker_symbol'), unique=False, nullable=False)
-    # dividend_summary_data = db.Column(db.String(1000), nullable=False) #needs to be unpacked becuase produces multiple columns
     effective_date = db.Column(db.DateTime, unique=False, nullable=False)
     dividend_type = db.Column(db.Integer, unique=False, nullable =False)
     dividend_amount = db.Column(db.Integer, unique=False, nullable=False)
@@ -181,23 +173,6 @@ class DividendSummary(db.Model):
         """Provide helpful representation when printed."""
 
         return "<%s's dividend summary info belongs to %s>" % (self.dividend_summary_id, self.ticker_symbol)
-
-
-# class IncomeStatementSummary(db.Model):
-#     """The income statement summary activity for all the stocks available on the Perihelion Group's website."""
-
-#     __tablename__ = "stockincomestatements"
-
-#     income_statement_summary_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     ticker_symbol = db.Column(db.String(15), db.ForeignKey('stocks.ticker_symbol'), nullable=False)
-#     income_statement_summary_data = db.Column(db.String(1000), nullable=False) #needs to be unpacked becuase produces multiple columns
-    
-#     ticker_symbol = db.relationship('Stocklist', backref=db.backref('stock_income_statements'))
-
-# #     def __repr__(self):
-# #         """Provide helpful representation when printed."""
-
-# #         return "<%s's income statement summary info belongs to %s>" % (self.income_statement_summary_id, self.ticker_symbol)
 
 
 class StockUser(db.Model):

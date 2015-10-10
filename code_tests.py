@@ -33,11 +33,9 @@ with open('seed_data/amex_stock_summary.csv', 'rb') as seedfile:
         #     # print tickersymbol
         #     current_price = tickersymbol.split(" ")[1]
         #     # print current_price
-
-
+        
         tickerinsurance = row[7].rstrip()
         # print tickerinsurance #done
-        
         
         stocksummarydata = row[9].rstrip()
 
@@ -180,7 +178,6 @@ with open('seed_data/amex_dividend_summary.csv', 'rb') as seedfile:
             if dividendbroken[0] != disqualifier:
                 for element in range(len(dividendbroken)/6):
                    date, t, value = dividendbroken[11+element*6:14+element*6]
-                print date
 
 
         # good resource on how to get the items of a list unpacked

@@ -8,7 +8,6 @@ with open('seed_data/global_gdp_data.csv', 'rb') as seedfile:
     for row in reader:
         countryname = row[0].rstrip()
         uniquecountries.add(countryname)
-    print len(uniquecountries)
 
     # uniquesegment = set()
     # for row in reader:

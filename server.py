@@ -45,7 +45,6 @@ def user_registration():
     db.session.add(new_user)
     db.session.commit()
 
-    flash("%s, Welcome to the Perihelion Group!" % username)
     return redirect("/logintemplate")
 
 @app.route('/logintemplate')
@@ -92,8 +91,6 @@ def sectorselect():
 
     sectors = db.session.query(Stock.sector_name).filter(~Stock.ticker_symbol.in_(current_user_tickers)).all()
     
-    print "Here is the list", sectors
-
     list_of_sectors = [sector_tuple[0] for sector_tuple in sectors]
 
     unique_sectors = set(list_of_sectors)
@@ -123,12 +120,10 @@ def companyselect():
     user = User.query.filter_by(user_id=current_user_id).first()
 
     if user.speculative == "No":
-        print "is not speculative", user.speculative
         for company in companies: 
             for c in company.stockdividends:
                 tickers_set.add(c.ticker_symbol)
     else:
-        print "is speculative", user.speculative
         for company in companies:
             tickers_set.add(company.ticker_symbol)
 
@@ -170,18 +165,6 @@ def portfolio_json():
     # outerdata = {"children": data, "name": "stockidentifier"}
     return jsonify(data)
 
-
-
-
-#     user_name = 
-#     password = 
-#     initial_investment = 
-#     speculative =
-
-#     new_user = User(email=email, password=password, age=age, zipcode=zipcode)
-
-#     db.session.add(new_user)
-#     db.session.commit()
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

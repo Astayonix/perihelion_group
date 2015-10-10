@@ -1,4 +1,4 @@
-"""Utility file to seed ratings Perihelion Group database data located in in seed_data/"""
+"""Utility file to seed The Perihelion Group database data located in seed_data/"""
 
 import re
 import csv
@@ -10,9 +10,6 @@ from server import app
 
 def load_sectors():
     """Load sectors from nasdaq.csv into the database."""
-
-    print "Sectors"
-
     # begin the unpack of the companies available for trade on the amex, nasdaq, and nyse list!
     with open('seed_data/amex_nasdaq_nyse_companies.csv', 'rb') as seedfile:
         reader = csv.reader(seedfile, delimiter=",")
@@ -31,9 +28,6 @@ def load_sectors():
 
 def load_industries():
     """Load industries from nasdaq.csv into the database."""
-
-    print "Industries"
-
     # begin the unpack of the companies available for trade on the amex, nasdaq, and nyse list!
     with open('seed_data/amex_nasdaq_nyse_companies.csv', 'rb') as seedfile:
         reader = csv.reader(seedfile, delimiter=",")
@@ -52,9 +46,6 @@ def load_industries():
 
 def load_stocks():
     """Load population of stocks from nasdaq.csv and into the database."""
-
-    print "Create Stock Table"
-
     # all of the ticker symbols available for trade on the amex, nasdaq, and nyse list
     with open('seed_data/amex_nasdaq_nyse_companies.csv', 'rb') as seedfile:
         reader = csv.reader(seedfile, delimiter=",")
@@ -78,9 +69,6 @@ def load_stocks():
 
 def fill_stock_desc():
     """Load population of stocks from nasdaq.csv and into the database."""
-
-    print "Fill Stock Desc"
-
     # all of the ticker symbols available for trade on the amex, nasdaq, and nyse list
     seedfilepathlist = ['seed_data/amex_stock_summary.csv', 'seed_data/nasdaq_stock_summary.csv', 'seed_data/nyse_stock_summary.csv']
 
@@ -104,9 +92,6 @@ def fill_stock_desc():
 
 def load_stock_summary():
     """Load population of stocks summary information from nasdaq.csv and into the database."""
-
-    print "Create Stock Summary Table"
-
     # all of the stock summary information available for the amex, nasdaq, and nyse list
     seedfilepathlist = ['seed_data/amex_stock_summary.csv', 'seed_data/nasdaq_stock_summary.csv', 'seed_data/nyse_stock_summary.csv']
 
@@ -229,9 +214,6 @@ def load_stock_summary():
 
 def fill_last_trade():
     """Load population of last trades from nasdaq.csv and into the database."""
-
-    print "Fill Last Trade"
-
     # all of the ticker symbols available for trade on the amex, nasdaq, and nyse list
     with open('seed_data/amex_nasdaq_nyse_companies.csv', 'rb') as seedfile:
         reader = csv.reader(seedfile, delimiter=",")
@@ -249,9 +231,6 @@ def fill_last_trade():
 
 def load_dividend_summary():
     """Load population of dividend summary information from dividend_summary.csvs and into the database."""
-
-    print "Load Dividend Summary"
-
     # all of the ticker symbols available for trade on the amex, nasdaq, and nyse list
     seedfilepathlist = ['seed_data/amex_dividend_summary.csv', 'seed_data/nasdaq_dividend_summary.csv', 'seed_data/nyse_dividend_summary.csv']
 

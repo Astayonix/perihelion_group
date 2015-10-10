@@ -3,42 +3,43 @@
 <style>
 h1, h3{
     text-align: center;
-}
+    }
 </style>
-        <h1>Welcome to Registration!</h1>
-        <h3>Please tell us more about yourself.</h3>
-        <br>
+<h1>Welcome to Registration!</h1>
+<h3>Please tell us more about yourself.</h3>
+<br>
 <form action="/registration" method="POST" class="form-horizontal">
   <div class="form-group">
-    <label for="username" class="col-sm-2 col-md-offset-2 control-label">Please Enter Your Name</label>
+    <label for="username" class="col-sm-2 col-md-offset-2 control-label">Please Enter Your Name
+    </label>
     <div class="col-sm-5">
       <input type="text" default="Name" name="username" class="form-control" id="username" placeholder="username">
     </div>
   </div>
   <div class="form-group">
-    <label for="password" class="col-sm-2 col-md-offset-2 control-label">Please Create A Password</label>
+    <label for="password" class="col-sm-2 col-md-offset-2 control-label">Please Create A Password
+    </label>
     <div class="col-sm-5">
       <input type="password" name="password" value="password" class="form-control" id="password" placeholder="password">
     </div>
   </div>
-
-<div class="form-group">
-    <label for="amount" class="col-sm-2 col-md-offset-2 control-label">Enter Your Investment Amount</label>
+  <div class="form-group">
+    <label for="amount" class="col-sm-2 col-md-offset-2 control-label">Enter Your Investment Amount
+    </label>
     <div class="col-sm-5">
       <input type="number" name="investment" value="10000" class="form-control" id="amount">
     </div>
   </div>
-
-<div class="form-group">
-    <label for="speculative" class="col-sm-2 col-md-offset-2 control-label">Would You Like To Speculate?</label>
+  <div class="form-group">
+    <label for="speculative" class="col-sm-2 col-md-offset-2 control-label">Would You Like To Speculate?
+    </label>
     <div class="col-sm-1">
-        <select id="speculative" name="speculative" class="form-control">
-            <option>Yes</option>
-            <option>No</option>
-        </select>
+      <select id="speculative" name="speculative" class="form-control">
+        <option>Yes</option>
+        <option>No</option>
+      </select>
     </div>
   </div>
-
   <div class="form-group">
     <div class="col-sm-offset-4 col-sm-5">
       <button type="submit" class="btn btn-default" name="submitme">Welcome!</button>
@@ -46,4 +47,3 @@ h1, h3{
   </div>
 </form>
 {% endblock %}
-

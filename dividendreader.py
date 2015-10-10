@@ -18,18 +18,13 @@ with open('seed_data/amex_dividend_summary.csv', 'rb') as seedfile:
             if dividendbroken[0]!="Dividend":
                 dividendtrimmed = dividendbroken[11:]
                 for i in range(0,len(dividendtrimmed),6):
-                    print ticker_insurance
                     effective_date = dividendtrimmed[i]
                     if effective_date:
                         effective_date = datetime.datetime.strptime(effective_date, "%m/%d/%Y")
                     else:
                         effective_date = None
-                    print effective_date
                     dividend_type = dividendtrimmed[i+1]
-                    print dividend_type
                     dividend_amount = dividendtrimmed[i+2]
-                    print dividend_amount
-
 
         # good resource on how to get the items of a list unpacked
         # tickersymbol = row[6].rstrip()

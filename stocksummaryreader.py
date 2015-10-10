@@ -29,7 +29,6 @@ for seedfilepath in seedfilepathlist:
             tickerinsurance = row[7].rstrip()
             # print tickerinsurance #done
             
-            
             stocksummarydata = row[9].rstrip()
 
             re_one_yr_target = re.search(r"(Year Target )(-?\d+\.?\d+|0)", stocksummarydata)

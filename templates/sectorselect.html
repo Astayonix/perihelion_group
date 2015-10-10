@@ -2,17 +2,17 @@
 {% block content %}
 <h1>Select Your Sectors</h1>
 <form method="GET" action="/industryselect">
-<br>
-<div class="row">
-{% for sector in sectors %}
-<div class="col-md-3">
-<label>
-<input type="checkbox" name="sectors" value="{{sector}}">
-{{sector}}
-</label>
-</div>
-{% endfor %}
-</div>
-<input type="submit" class="btn btn-default" value="Next">
+    <br>
+    <div class="row">
+        {% for sector in sectors %}
+        <div class="col-md-3">
+        <label>
+            <input type="checkbox" name="sectors" value="{{sector}}">
+            {{sector}}
+        </label>
+        </div>
+        {% endfor %}
+    </div>
+    <input type="submit" class="btn btn-default" value="Next">
 </form>
 {% endblock %}

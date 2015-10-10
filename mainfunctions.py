@@ -10,16 +10,11 @@ dividendlist=[]
 
 for companynames in companies:
     companynames = companies.keys()
-print companynames
 numofcompanies = len(companies.keys())
-print numofcompanies
 
 for valuesdict in companies:
     valuesdict = companies.keys()
     lasttradelist[valuesdict].iterkeys()
-print lasttrade
-print valuesdict
-print initial_investment
 
 # so let's say you have a dictionary with information about companies and their
 # yearly dividends that looks like this:

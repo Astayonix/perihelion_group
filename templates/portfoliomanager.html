@@ -1,154 +1,142 @@
 {% extends "base.html" %}
 {% block content %}
-<!-- <!doctype html>
-<html lang="en">
-    <head>
-        <title> The Perihelion Group</title> -->
-      <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"> -->
-    <style>
-        #modalbody{
-          overflow:auto;
-          height:600px;
-        }
-        #headder{
-          text-align: center;
-        }
-        #companyname{
-          font-weight: bold;
-        }
-        #companyticker{
-          ;
-        }
-        #companysector{
-          ;
-        }
-        #companyindustry{
-          ;
-        }
-        #companydesc{
-          ;
-        }
-        circle {
-          fill: rgb(31, 119, 180);
-          fill-opacity: .25;
-          stroke: rgb(31, 119, 180);
-          stroke-width: 1px;
-        }
+<style>
+  #modalbody{
+    overflow:auto;
+    height:600px;
+  }
+  #headder{
+    text-align: center;
+  }
+  #companyname{
+    font-weight: bold;
+  }
+/*  #companyticker{;
+  }
+  #companysector{;
+  }
+  #companyindustry{;
+  }
+  #companydesc{;
+  }*/
+  circle {
+    fill: rgb(31, 119, 180);
+    fill-opacity: .25;
+    stroke: rgb(31, 119, 180);
+    stroke-width: 1px;
+  }
 
-        .leaf circle {
-          fill: #ff7f0e;
-          fill-opacity: 1;
-        }
+  .leaf circle {
+    fill: #ff7f0e;
+    fill-opacity: 1;
+  }
 
-        text {
-          font: 10px sans-serif;
-        }
-        </style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="row" id="headder">
-          <h1 data-toggle="modal" data-target="#myModal"> Here Is Your Perihelion Group Portfolio </h1>
+  text {
+    font: 10px sans-serif;
+  }
+</style>
+<!-- </head> -->
+
+<body>
+<div class="container">
+  <div class="row" id="headder">
+    <h1 data-toggle="modal" data-target="#myModal"> Here Is Your Perihelion Group Portfolio 
+    </h1>
+    <br>
+  </div>
+<div class="row">
+  <div class="col-md-9" id="thechart"></div>
+  <div class="col-md-3" id="companydetail"></div>
+</div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+        </button>
+      <h4 class="modal-title" align="center" text="bold">TPG Portfolio Details
+      </h4>
+      </div>
+        <div class="modal-body" id="modalbody">
+          {% for stock in userstocks %}
+          <div class="companyname">
+          Company Name: {{stock.company_name}}
+          </div>
+          <div class="companyticker">
+          Ticker Symbol: {{stock.ticker_symbol}}
+          </div>
+          <div class="companysector">
+          Economic Sector: {{stock.sector.sector_name}}
+          </div>
+          <div class="companyindustry">
+          Related Industry: {{stock.industry.industry_name}}
+          </div>
+          <div class="companydesc">
+          Company Desc: {{stock.company_desc}}
+          </div>
           <br>
+          <br>
+          {% endfor %}
         </div>
-        <div class="row">
-          <div class="col-md-9" id="thechart"></div>
-          <div class="col-md-3" id="companydetail"></div>
-        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" align="center" text="bold">TPG Portfolio Details</h4>
-            </div>
-            <div class="modal-body" id="modalbody">
-              {% for stock in userstocks %}
-                  <div class="companyname">
-                  Company Name: {{stock.company_name}}
-                  </div>
-                  <div class="companyticker">
-                  Ticker Symbol: {{stock.ticker_symbol}}
-                  </div>
-                  <div class="companysector">
-                  Economic Sector: {{stock.sector.sector_name}}
-                  </div>
-                  <div class="companyindustry">
-                  Related Industry: {{stock.industry.industry_name}}
-                  </div>
-                  <div class="companydesc">
-                  Company Desc: {{stock.company_desc}}
-                  </div>
-                  <br>
-                  <br>
-                  {% endfor %}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-      </div>
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-        <script src="/static/javascript/colorbrewer.js"></script>
-        <script>
-        $(document).ready(function(){
-        var diameter = 960,
-            format = d3.format(",d");
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="/static/javascript/colorbrewer.js"></script>
+<script>
+  $(document).ready(function(){
+  var diameter = 960,
+      format = d3.format(",d");
 
-        var pack = d3.layout.pack()
-            .size([diameter - 4, diameter - 4])
-            .value(function(d) { return d.size; });
-
-        var y = d3.scale.linear()
-                .range([0,720]);
-
-        var svg = d3.select("#thechart").append("svg")
-            .attr("width", diameter)
-            .attr("height", diameter)
-          .append("g")
-            .attr("transform", "translate(2,2)");
-
-        d3.json("/portfoliojson", function(root) {
-
-          // if (error) throw error;
-          // debugger;
-          var color = d3.scale.linear()
-            .range(['lightgreen',"darkgreen"])
-            .domain([root.min, root.max]);
-            // debugger;
-          delete root['min'];
-          delete root['max'];
-          var node = svg.datum(root).selectAll(".node")
-              .data(pack.nodes)
-            .enter().append("g")
-              .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
-              .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-          node.append("title")
-              .text(function(d) { 
-                // if ( !d.children){
-                //   debugger
-                // }
-                return d.name + (d.children ? "" : ": " + format(d.size)); });
-
-          node.append("circle")
-              .attr("r", function(d) { return d.r; })
-              .style("fill", function(d) {return color(d.dividend)});
-
-          node.filter(function(d) { return !d.children; }).append("text")
-              .attr("dy", ".3em")
-              .style("text-anchor", "middle")
-              .text(function(d) { return d.name.substring(0, d.r / 3); });
-        });
-
-        d3.select(self.frameElement).style("height", diameter + "px");
+  var pack = d3.layout.pack()
+      .size([diameter - 4, diameter - 4])
+      .value(function(d) { return d.size;
       });
 
-        </script>
+  var y = d3.scale.linear()
+      .range([0,720]);
+
+  var svg = d3.select("#thechart").append("svg")
+      .attr("width", diameter)
+      .attr("height", diameter)
+      .append("g")
+      .attr("transform", "translate(2,2)");
+
+  d3.json("/portfoliojson", function(root) {
+  var color = d3.scale.linear()
+      .range(['lightgreen',"darkgreen"])
+      .domain([root.min, root.max]);
+      delete root['min'];
+      delete root['max'];
+  
+  var node = svg.datum(root).selectAll(".node")
+        .data(pack.nodes)
+        .enter().append("g")
+        .attr("class", function(d) { return d.children ? "node" : "leaf node";
+      })
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")";
+      });
+        node.append("title")
+        .text(function(d) {
+        return d.name + (d.children ? "" : ": " + format(d.size));
+      });
+
+    node.append("circle")
+        .attr("r", function(d) { return d.r; })
+        .style("fill", function(d) {return color(d.dividend)});
+
+    node.filter(function(d) { return !d.children; }).append("text")
+        .attr("dy", ".3em")
+        .style("text-anchor", "middle")
+        .text(function(d) { return d.name.substring(0, d.r / 3); });
+  });
+
+  d3.select(self.frameElement).style("height", diameter + "px");
+});
+</script>
 {% endblock %}
-        <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> -->
- <!--    </body>
-</html> -->
