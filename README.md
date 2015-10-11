@@ -9,34 +9,34 @@ This is a visualization tool meant to help investors think more strategically ab
 
 <h5> Visualization of User Experience </h5>
 Landing Page:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_1.bmp)
+![alt tag](static/img/tpg_ux_1.jpg)
 
 User Registration:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_2.bmp)
+![alt tag](static/img/tpg_ux_2.jpg)
 
 User Signs In:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_3.bmp)
+![alt tag](static/img/tpg_ux_3.jpg)
 
 User Selects Sectors:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_4.bmp)
+![alt tag](static/img/tpg_ux_4.jpg)
 
 User Selects Industries:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_5.bmp)
+![alt tag](static/img/tpg_ux_5.jpg)
 
 User Selects Companies #1:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_6.bmp)
+![alt tag](static/img/tpg_ux_6.jpg)
 
 User Selects Companies #2:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_7.bmp)
+![alt tag](static/img/tpg_ux_7.jpg)
 
 User's TPG Portfolio Visualization #1:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_8.bmp)
+![alt tag](static/img/tpg_ux_8.jpg)
 
 User's TPG Portfolio Visualization #2:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_9.bmp)
+![alt tag](static/img/tpg_ux_9.jpg)
 
 User's Portfolio Detail Modal Window:
-![alt tag](https://raw.github.com/astayonix/perihelion_group/master/static/img/tpg_ux_10.bmp)
+![alt tag](static/img/tpg_ux_10.jpg)
 
 <h5> Technical Stack </h5>
 Python, Javascript, Flask, Jinja, jQuery, SQLAlchemy, D3.js, HTML/CSS, Bootstrap, Import.io, JSON, SQLAlchemy, SQLite, and RegEx for Python
